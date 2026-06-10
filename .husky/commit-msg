@@ -1,0 +1,7 @@
+#!/bin/sh
+commit_msg=$(cat "$1")
+
+if ! echo "$commit_msg" | grep -qE "^(main|TK-[0-9]+): .+"; then
+  echo "❌ Commit must start with 'main: Your commit message' or 'TK-15: Your commit message'"
+  exit 1
+fi
