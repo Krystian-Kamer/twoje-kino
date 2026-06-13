@@ -1,0 +1,8 @@
+model Movie {
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  duration    Int
+  cinemaId    Int
+  cinema      Cinema @relation(fields: [cinemaId], references: [id])
+}

@@ -1,0 +1,9 @@
+model Hall {
+  id       Int    @id @default(autoincrement())
+  name     String
+  rows     Int
+  cols     Int
+  cinemaId Int
+  cinema   Cinema @relation(fields: [cinemaId], references: [id])
+  seats    Seat[]
+}
