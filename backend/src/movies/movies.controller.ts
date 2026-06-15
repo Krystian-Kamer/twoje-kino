@@ -29,12 +29,16 @@ export class MoviesController {
     @Body('title') title: string,
     @Body('description') description: string,
     @Body('duration') duration: number,
+    @Body('videoUrl') videoUrl: string,
+    @Body('thumbnailUrl') thumbnailUrl: string,
   ) {
     return this.moviesService.createMovie(
       +cinemaId,
       title,
       description,
       duration,
+      videoUrl,
+      thumbnailUrl,
     );
   }
 
@@ -45,6 +49,8 @@ export class MoviesController {
     @Body('title') title: string,
     @Body('description') description: string,
     @Body('duration') duration: number,
+    @Body('videoUrl') videoUrl: string,
+    @Body('thumbnailUrl') thumbnailUrl: string,
   ) {
     return this.moviesService.updateMovie(
       +cinemaId,
@@ -52,6 +58,8 @@ export class MoviesController {
       title,
       description,
       duration,
+      videoUrl,
+      thumbnailUrl,
     );
   }
 

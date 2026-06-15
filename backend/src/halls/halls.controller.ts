@@ -27,10 +27,9 @@ export class HallsController {
   createHall(
     @Param('cinemaId') cinemaId: string,
     @Body('name') name: string,
-    @Body('rows') rows: number,
-    @Body('cols') cols: number,
+    @Body('seats') seats: { row: number; col: number; status?: string }[],
   ) {
-    return this.hallsService.createHall(+cinemaId, name, rows, cols);
+    return this.hallsService.createHall(+cinemaId, name, seats);
   }
 
   @Put(':id')
@@ -38,10 +37,9 @@ export class HallsController {
     @Param('cinemaId') cinemaId: string,
     @Param('id') id: string,
     @Body('name') name: string,
-    @Body('rows') rows: number,
-    @Body('cols') cols: number,
+    @Body('seats') seats: { row: number; col: number; status?: string }[],
   ) {
-    return this.hallsService.updateHall(+cinemaId, +id, name, rows, cols);
+    return this.hallsService.updateHall(+cinemaId, +id, name, seats);
   }
 
   @Delete(':id')

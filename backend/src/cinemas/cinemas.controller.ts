@@ -8,6 +8,8 @@ import {
   Param,
 } from '@nestjs/common';
 import { CinemasService } from './cinemas.service';
+import { CreateCinemaDto } from './dto/create-cinema.dto';
+import { UpdateCinemaDto } from './dto/update-cinema.dto';
 
 @Controller('cinemas')
 export class CinemasController {
@@ -24,13 +26,13 @@ export class CinemasController {
   }
 
   @Post()
-  createCinema(@Body('name') name: string) {
-    return this.cinemasService.createCinema(name);
+  createCinema(@Body() dto: CreateCinemaDto) {
+    return this.cinemasService.createCinema(dto.name);
   }
 
   @Put(':id')
-  updateCinema(@Param('id') id: string, @Body('name') name: string) {
-    return this.cinemasService.updateCinema(+id, name);
+  updateCinema(@Param('id') id: string, @Body() dto: UpdateCinemaDto) {
+    return this.cinemasService.updateCinema(+id, dto.name);
   }
 
   @Delete(':id')

@@ -1,8 +1,10 @@
 model Movie {
-  id          Int    @id @default(autoincrement())
-  title       String
-  description String
-  duration    Int
-  cinemaId    Int
-  cinema      Cinema @relation(fields: [cinemaId], references: [id])
+  id           Int    @id @default(autoincrement())
+  title        String
+  description  String
+  duration     Int
+  cinemaId     Int
+  videoUrl     String
+  thumbnailUrl String
+  cinema       Cinema @relation(fields: [cinemaId], references: [id])
 }
