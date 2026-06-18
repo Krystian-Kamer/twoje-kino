@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { NotFoundException } from '@nestjs/common';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Injectable()
 export class MoviesService {
@@ -18,28 +20,13 @@ export class MoviesService {
     return movie;
   }
 
-  async createMovie(
-    cinemaId: number,
-    title: string,
-    description: string,
-    duration: number,
-    videoUrl: string,
-    thumbnailUrl: string,
-  ) {
+  async createMovie(cinemaId: number, dto: CreateMovieDto) {
     return this.prisma.movie.create({
-      data: { cinemaId, title, description, duration, videoUrl, thumbnailUrl },
+      data: { cinemaId, ...dto },
     });
   }
 
-  async updateMovie(
-    cinemaId: number,
-    id: number,
-    title: string,
-    description: string,
-    duration: number,
-    videoUrl: string,
-    thumbnailUrl: string,
-  ) {
+  async updateMovie(cinemaId: number, id: number, dto: UpdateMovieDto) {
     const movie = await this.prisma.movie.findFirst({
       where: { id, cinemaId },
     });
@@ -47,7 +34,7 @@ export class MoviesService {
 
     return this.prisma.movie.update({
       where: { id },
-      data: { title, description, duration, videoUrl, thumbnailUrl },
+      data: dto,
     });
   }
 

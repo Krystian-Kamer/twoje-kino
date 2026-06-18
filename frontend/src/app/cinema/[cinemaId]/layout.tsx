@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  params: Promise<{ cinema: string }>;
+  params: Promise<{ cinemaId: string }>;
 };
 
 export default async function UserLayout({
   children,
   params,
 }: { children: ReactNode } & Props) {
-  const { cinema } = await params;
+  const { cinemaId } = await params;
 
   return (
     <div className="h-full bg-red-900 text-white">
@@ -25,11 +25,11 @@ export default async function UserLayout({
           logo={'/logo.svg'}
           logoAlt="Cinema logo"
           items={[
-            { label: 'Repertuar', href: urls.repertoire(cinema) },
-            { label: 'Wkrótce', href: urls.comingSoon(cinema) },
-            { label: 'Cennik', href: urls.pricing(cinema) },
-            { label: 'O kinie', href: urls.about(cinema) },
-            { label: 'Kontakt', href: urls.contact(cinema) },
+            { label: 'Repertuar', href: urls.repertoire(Number(cinemaId)) },
+            { label: 'Wkrótce', href: urls.comingSoon(Number(cinemaId)) },
+            { label: 'Cennik', href: urls.pricing(Number(cinemaId)) },
+            { label: 'O kinie', href: urls.about(Number(cinemaId)) },
+            { label: 'Kontakt', href: urls.contact(Number(cinemaId)) },
           ]}
           activeHref="/"
           className="custom-nav"

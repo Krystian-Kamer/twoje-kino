@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { SeatStatus } from '../../prisma/generated/prisma/enums';
+import { CreateHallDto } from './dto/create-hall.dto';
+import { UpdateHallDto } from './dto/update-hall.dto';
 
 @Injectable()
 export class HallsService {
@@ -22,20 +24,16 @@ export class HallsService {
     return hall;
   }
 
-  createHall(
-    cinemaId: number,
-    name: string,
-    seats: { row: number; col: number; status?: string }[],
-  ) {
+  createHall(cinemaId: number, dto: CreateHallDto) {
     return this.prisma.hall.create({
       data: {
-        name,
+        name: dto.name,
         cinemaId,
         seats: {
-          create: seats.map((seat) => ({
+          create: dto.seats.map((seat) => ({
             row: seat.row,
             col: seat.col,
-            status: (seat.status as SeatStatus) ?? SeatStatus.ACTIVE,
+            status: seat.status ?? SeatStatus.ACTIVE,
           })),
         },
       },
@@ -43,28 +41,27 @@ export class HallsService {
     });
   }
 
-  async updateHall(
-    cinemaId: number,
-    id: number,
-    name: string,
-    seats: { row: number; col: number; status?: string }[],
-  ) {
+  async updateHall(cinemaId: number, id: number, dto: UpdateHallDto) {
     const hall = await this.prisma.hall.findFirst({ where: { id, cinemaId } });
     if (!hall) throw new NotFoundException('Hall not found');
 
-    await this.prisma.seat.deleteMany({ where: { hallId: id } });
+    if (dto.seats !== undefined) {
+      await this.prisma.seat.deleteMany({ where: { hallId: id } });
+    }
 
     return this.prisma.hall.update({
       where: { id },
       data: {
-        name,
-        seats: {
-          create: seats.map((seat) => ({
-            row: seat.row,
-            col: seat.col,
-            status: (seat.status as SeatStatus) ?? SeatStatus.ACTIVE,
-          })),
-        },
+        name: dto.name,
+        ...(dto.seats !== undefined && {
+          seats: {
+            create: dto.seats.map((seat) => ({
+              row: seat.row,
+              col: seat.col,
+              status: seat.status ?? SeatStatus.ACTIVE,
+            })),
+          },
+        }),
       },
       include: { seats: true },
     });

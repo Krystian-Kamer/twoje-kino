@@ -1,6 +1,7 @@
 model Cinema {
-  id     Int     @id @default(autoincrement())
-  name   String
-  movies Movie[]
-  halls  Hall[]
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String
+  movies      Movie[]
+  halls       Hall[]
 }

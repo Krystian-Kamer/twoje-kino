@@ -1,8 +1,16 @@
 import { Typography } from '@/components/ui/typography';
 import Link from 'next/link';
-import { urls } from '@/lib/urls';
+import { apiInstance, urls } from '@/lib/urls';
 
-const Homepage = () => {
+type Cinema = {
+  id: number;
+  name: string;
+  description: string;
+};
+
+const Homepage = async () => {
+  const { data: cinemas } = await apiInstance.get<Cinema[]>('/cinemas');
+
   return (
     <div className="h-full bg-blue-950 text-white">
       <nav className="flex h-20 items-center bg-black px-10 text-white">
@@ -13,14 +21,22 @@ const Homepage = () => {
       </nav>
       <main className="mx-auto my-20 max-w-7xl px-10">
         <Typography variant="h2">Wybierz dostępne kina</Typography>
-        <div className="flex flex-col gap-y-2">
-          <Link className="w-fit capitalize" href={urls.cinema('marylin')}>
-            marilyn
-          </Link>
-          <Link className="w-fit capitalize" href={urls.cinema('bellucci')}>
-            bellucci
-          </Link>
-        </div>
+
+        {cinemas.length === 0 ? (
+          <div>Brak kin do wyświetlenia</div>
+        ) : (
+          <div className="flex flex-col gap-y-2">
+            {cinemas.map((cinema) => (
+              <Link
+                key={cinema.id}
+                className="w-fit capitalize"
+                href={urls.cinema(cinema.id)}
+              >
+                {cinema.name}
+              </Link>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

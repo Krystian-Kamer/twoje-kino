@@ -27,12 +27,12 @@ export class CinemasController {
 
   @Post()
   createCinema(@Body() dto: CreateCinemaDto) {
-    return this.cinemasService.createCinema(dto.name);
+    return this.cinemasService.createCinema(dto);
   }
 
   @Put(':id')
   updateCinema(@Param('id') id: string, @Body() dto: UpdateCinemaDto) {
-    return this.cinemasService.updateCinema(+id, dto.name);
+    return this.cinemasService.updateCinema(+id, dto);
   }
 
   @Delete(':id')

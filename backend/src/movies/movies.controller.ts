@@ -6,65 +6,47 @@ import {
   Delete,
   Param,
   Body,
+  UseGuards,
 } from '@nestjs/common';
 import { MoviesService } from './movies.service';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
+import { CinemaContextGuard } from '../common/guards';
+import { CinemaId } from '../common/decorators';
+import { ApiParam } from '@nestjs/swagger';
 
-@Controller('cinemas/:cinemaId/movies')
+@Controller('movies')
+@UseGuards(CinemaContextGuard)
+@ApiParam({ name: 'cinemaId', type: Number, example: 1 })
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) {}
 
   @Get()
-  getAllMovies(@Param('cinemaId') cinemaId: string) {
-    return this.moviesService.getAllMovies(+cinemaId);
+  getAllMovies(@CinemaId() cinemaId: number) {
+    return this.moviesService.getAllMovies(cinemaId);
   }
 
-  @Get(':id')
-  getMovie(@Param('cinemaId') cinemaId: string, @Param('id') id: string) {
-    return this.moviesService.getMovie(+cinemaId, +id);
+  @Get(':movieId')
+  getMovie(@CinemaId() cinemaId: number, @Param('movieId') movieId: string) {
+    return this.moviesService.getMovie(cinemaId, +movieId);
   }
 
   @Post()
-  createMovie(
-    @Param('cinemaId') cinemaId: string,
-    @Body('title') title: string,
-    @Body('description') description: string,
-    @Body('duration') duration: number,
-    @Body('videoUrl') videoUrl: string,
-    @Body('thumbnailUrl') thumbnailUrl: string,
-  ) {
-    return this.moviesService.createMovie(
-      +cinemaId,
-      title,
-      description,
-      duration,
-      videoUrl,
-      thumbnailUrl,
-    );
+  createMovie(@CinemaId() cinemaId: number, @Body() dto: CreateMovieDto) {
+    return this.moviesService.createMovie(cinemaId, dto);
   }
 
-  @Put(':id')
+  @Put(':movieId')
   updateMovie(
-    @Param('cinemaId') cinemaId: string,
-    @Param('id') id: string,
-    @Body('title') title: string,
-    @Body('description') description: string,
-    @Body('duration') duration: number,
-    @Body('videoUrl') videoUrl: string,
-    @Body('thumbnailUrl') thumbnailUrl: string,
+    @CinemaId() cinemaId: number,
+    @Param('movieId') movieId: string,
+    @Body() dto: UpdateMovieDto,
   ) {
-    return this.moviesService.updateMovie(
-      +cinemaId,
-      +id,
-      title,
-      description,
-      duration,
-      videoUrl,
-      thumbnailUrl,
-    );
+    return this.moviesService.updateMovie(cinemaId, +movieId, dto);
   }
 
-  @Delete(':id')
-  removeMovie(@Param('cinemaId') cinemaId: string, @Param('id') id: string) {
-    return this.moviesService.removeMovie(+cinemaId, +id);
+  @Delete(':movieId')
+  removeMovie(@CinemaId() cinemaId: number, @Param('movieId') movieId: string) {
+    return this.moviesService.removeMovie(cinemaId, +movieId);
   }
 }

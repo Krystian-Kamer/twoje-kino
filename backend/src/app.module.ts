@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { PrismaService } from './prisma.service';
-import { CinemasModule } from './cinemas/cinemas.module';
 import { ConfigModule } from '@nestjs/config';
+import { RouterModule } from '@nestjs/core';
+import { PrismaModule } from './prisma/prisma.module';
+import { CinemasModule } from './cinemas/cinemas.module';
 import { MoviesModule } from './movies/movies.module';
 import { HallsModule } from './halls/halls.module';
 import { ScreeningsModule } from './screenings/screenings.module';
@@ -12,14 +11,23 @@ import { ReservationsModule } from './reservations/reservations.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
     CinemasModule,
     MoviesModule,
     HallsModule,
     ScreeningsModule,
     ReservationsModule,
+    RouterModule.register([
+      {
+        path: 'cinemas/:cinemaId',
+        children: [
+          MoviesModule,
+          HallsModule,
+          ScreeningsModule,
+          ReservationsModule,
+        ],
+      },
+    ]),
   ],
-  controllers: [AppController],
-  providers: [AppService, PrismaService],
-  exports: [PrismaService],
 })
 export class AppModule {}
