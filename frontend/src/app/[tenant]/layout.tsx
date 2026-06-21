@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
-import { urls } from '@/lib/urls';
+import { url } from '@/lib/api';
 import Navbar from '@/components/ui/Navbar';
 
 export const metadata: Metadata = {
@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 };
 
 type Props = {
-  params: Promise<{ cinemaId: string }>;
+  params: Promise<{ tenant: string }>;
 };
 
 export default async function UserLayout({
   children,
   params,
 }: { children: ReactNode } & Props) {
-  const { cinemaId } = await params;
+  const { tenant } = await params;
 
   return (
     <div className="h-full bg-red-900 text-white">
@@ -25,11 +25,11 @@ export default async function UserLayout({
           logo={'/logo.svg'}
           logoAlt="Cinema logo"
           items={[
-            { label: 'Repertuar', href: urls.repertoire(Number(cinemaId)) },
-            { label: 'Wkrótce', href: urls.comingSoon(Number(cinemaId)) },
-            { label: 'Cennik', href: urls.pricing(Number(cinemaId)) },
-            { label: 'O kinie', href: urls.about(Number(cinemaId)) },
-            { label: 'Kontakt', href: urls.contact(Number(cinemaId)) },
+            { label: 'Repertuar', href: url.repertoire(tenant) },
+            { label: 'Wkrótce', href: url.comingSoon(tenant) },
+            { label: 'Cennik', href: url.pricing(tenant) },
+            { label: 'O kinie', href: url.about(tenant) },
+            { label: 'Kontakt', href: url.contact(tenant) },
           ]}
           activeHref="/"
           className="custom-nav"

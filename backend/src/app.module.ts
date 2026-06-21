@@ -19,7 +19,7 @@ import { ReservationsModule } from './reservations/reservations.module';
     ReservationsModule,
     RouterModule.register([
       {
-        path: 'cinemas/:cinemaId',
+        path: 'cinemas/:tenant',
         children: [
           MoviesModule,
           HallsModule,

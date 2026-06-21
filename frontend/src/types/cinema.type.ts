@@ -2,4 +2,5 @@ export interface Cinema {
   id: number;
   name: string;
   description: string;
+  tenant: string;
 }

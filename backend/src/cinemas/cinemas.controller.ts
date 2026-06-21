@@ -20,9 +20,9 @@ export class CinemasController {
     return this.cinemasService.getAllCinemas();
   }
 
-  @Get(':id')
-  getCinema(@Param('id') id: string) {
-    return this.cinemasService.getCinema(+id);
+  @Get(':tenant')
+  getCinema(@Param('tenant') tenant: string) {
+    return this.cinemasService.getCinema(tenant);
   }
 
   @Post()
@@ -30,13 +30,13 @@ export class CinemasController {
     return this.cinemasService.createCinema(dto);
   }
 
-  @Put(':id')
-  updateCinema(@Param('id') id: string, @Body() dto: UpdateCinemaDto) {
-    return this.cinemasService.updateCinema(+id, dto);
+  @Put(':tenant')
+  updateCinema(@Param('tenant') tenant: string, @Body() dto: UpdateCinemaDto) {
+    return this.cinemasService.updateCinema(tenant, dto);
   }
 
-  @Delete(':id')
-  removeCinema(@Param('id') id: string) {
-    return this.cinemasService.removeCinema(+id);
+  @Delete(':tenant')
+  removeCinema(@Param('tenant') tenant: string) {
+    return this.cinemasService.removeCinema(tenant);
   }
 }

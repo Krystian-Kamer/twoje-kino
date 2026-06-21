@@ -17,7 +17,7 @@ import { ApiParam } from '@nestjs/swagger';
 
 @Controller('halls')
 @UseGuards(CinemaContextGuard)
-@ApiParam({ name: 'cinemaId', type: Number, example: 1 })
+@ApiParam({ name: 'tenant', type: String, example: 'charlie' })
 export class HallsController {
   constructor(private readonly hallsService: HallsService) {}
 

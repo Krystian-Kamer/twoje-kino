@@ -13,17 +13,16 @@ export class CinemaContextGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    const cinemaId = +request.params.cinemaId;
+    const tenant = request.params.tenant;
 
     const cinema = await this.prisma.cinema.findUnique({
-      where: { id: cinemaId },
+      where: { tenant },
     });
 
     if (!cinema) {
-      throw new NotFoundException(`Cinema with id ${cinemaId} not found`);
+      throw new NotFoundException(`Cinema with tenant ${tenant} not found`);
     }
 
-    request.cinemaId = cinema.id;
     request.cinema = cinema;
 
     return true;

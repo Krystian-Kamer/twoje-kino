@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateCinemaDto } from './dto/create-cinema.dto';
 import { UpdateCinemaDto } from './dto/update-cinema.dto';
@@ -11,19 +11,25 @@ export class CinemasService {
     return this.prisma.cinema.findMany();
   }
 
-  async getCinema(id: number) {
-    return this.prisma.cinema.findUnique({ where: { id } });
+  async getCinema(tenant: string) {
+    const cinema = await this.prisma.cinema.findUnique({ where: { tenant } });
+
+    if (!cinema) {
+      throw new NotFoundException(`Cinema '${tenant}' not found`);
+    }
+
+    return cinema;
   }
 
   async createCinema(dto: CreateCinemaDto) {
     return this.prisma.cinema.create({ data: dto });
   }
 
-  async updateCinema(id: number, dto: UpdateCinemaDto) {
-    return this.prisma.cinema.update({ where: { id }, data: dto });
+  async updateCinema(tenant: string, dto: UpdateCinemaDto) {
+    return this.prisma.cinema.update({ where: { tenant }, data: dto });
   }
 
-  async removeCinema(id: number) {
-    return this.prisma.cinema.delete({ where: { id } });
+  async removeCinema(tenant: string) {
+    return this.prisma.cinema.delete({ where: { tenant } });
   }
 }

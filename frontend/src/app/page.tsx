@@ -1,15 +1,10 @@
 import { Typography } from '@/components/ui/typography';
 import Link from 'next/link';
-import { apiInstance, urls } from '@/lib/urls';
-
-type Cinema = {
-  id: number;
-  name: string;
-  description: string;
-};
+import { url } from '@/lib/api';
+import { getCinemasService } from '@/services/public/cinemas/get-cinemas.service';
 
 const Homepage = async () => {
-  const { data: cinemas } = await apiInstance.get<Cinema[]>('/cinemas');
+  const cinemas = await getCinemasService();
 
   return (
     <div className="h-full bg-blue-950 text-white">
@@ -30,7 +25,7 @@ const Homepage = async () => {
               <Link
                 key={cinema.id}
                 className="w-fit capitalize"
-                href={urls.cinema(cinema.id)}
+                href={url.cinema(cinema.tenant)}
               >
                 {cinema.name}
               </Link>
