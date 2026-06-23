@@ -8,8 +8,46 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 export class MoviesService {
   constructor(private prisma: PrismaService) {}
 
+  private readonly COMING_SOON_THRESHOLD_DAYS = 14;
+
   async getAllMovies(cinemaId: number) {
     return this.prisma.movie.findMany({ where: { cinemaId } });
+  }
+
+  async getNowPlayingMovies(cinemaId: number) {
+    const now = new Date();
+    const threshold = new Date(
+      now.getTime() + this.COMING_SOON_THRESHOLD_DAYS * 24 * 60 * 60 * 1000,
+    );
+
+    return this.prisma.movie.findMany({
+      where: {
+        cinemaId,
+        screenings: {
+          some: {
+            startsAt: { gte: now, lte: threshold },
+          },
+        },
+      },
+    });
+  }
+
+  async getComingSoonMovies(cinemaId: number) {
+    const threshold = new Date(
+      new Date().getTime() +
+        this.COMING_SOON_THRESHOLD_DAYS * 24 * 60 * 60 * 1000,
+    );
+
+    return this.prisma.movie.findMany({
+      where: {
+        cinemaId,
+        screenings: {
+          some: {
+            startsAt: { gt: threshold },
+          },
+        },
+      },
+    });
   }
 
   async getMovie(cinemaId: number, id: number) {

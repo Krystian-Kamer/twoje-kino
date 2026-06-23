@@ -1,0 +1,9 @@
+model Screening {
+  id       Int      @id @default(autoincrement())
+  startsAt DateTime
+  endsAt   DateTime
+  movieId  Int
+  hallId   Int
+  movie    Movie    @relation(fields: [movieId], references: [id])
+  hall     Hall     @relation(fields: [hallId], references: [id])
+}

@@ -6,7 +6,6 @@ import { CinemasModule } from './cinemas/cinemas.module';
 import { MoviesModule } from './movies/movies.module';
 import { HallsModule } from './halls/halls.module';
 import { ScreeningsModule } from './screenings/screenings.module';
-import { ReservationsModule } from './reservations/reservations.module';
 
 @Module({
   imports: [
@@ -16,16 +15,10 @@ import { ReservationsModule } from './reservations/reservations.module';
     MoviesModule,
     HallsModule,
     ScreeningsModule,
-    ReservationsModule,
     RouterModule.register([
       {
         path: 'cinemas/:tenant',
-        children: [
-          MoviesModule,
-          HallsModule,
-          ScreeningsModule,
-          ReservationsModule,
-        ],
+        children: [MoviesModule, HallsModule, ScreeningsModule],
       },
     ]),
   ],
